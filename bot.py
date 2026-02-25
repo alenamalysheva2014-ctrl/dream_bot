@@ -3,9 +3,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # ===== НАСТРОЙКИ =====
-TOKEN = os.getenv("BOT_TOKEN")  # можно потом заменить на TOKEN = "ТВОЙ_ТОКЕН"
-VIDEO1_ID = "VIDEO1_FILE_ID"
-VIDEO2_ID = "VIDEO2_FILE_ID"
+TOKEN = os.getenv("BOT_TOKEN")
+if not TOKEN:
+    raise ValueError("BOT_TOKEN is not set in environment variables")
+
 BONUS_TEXT = "Вот твоя сказка 🎁"
 
 # ===== ТЕКСТЫ =====
@@ -47,12 +48,12 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if query.data == "ready_1":
         await query.message.reply_text(MSG_WATCH_1)
-        await context.bot.send_video(chat_id=query.message.chat_id, video=VIDEO1_ID)
+        await query.message.reply_text("Видео 1 пока не подключено")
         await query.message.reply_text(MSG_AFTER_VIDEO_1, reply_markup=BTN_READY_2)
 
     elif query.data == "ready_2":
         await query.message.reply_text(MSG_READY_2)
-        await context.bot.send_video(chat_id=query.message.chat_id, video=VIDEO2_ID)
+        await query.message.reply_text("Видео 2 пока не подключено")
         await query.message.reply_text(MSG_AFTER_VIDEO_2, reply_markup=BTN_BONUS)
 
     elif query.data == "bonus":
